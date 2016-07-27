@@ -1,13 +1,14 @@
 # !/usr/bin/env python2.7
 #
 # tzStats.py -- Connects to PostgreSQL database
-# containing listing data and performs basic stats
+# containing listing data then performs basic stats
 # operations to confirm the data is good and explore
 # its contours.
 
 # 07/25/2016, Georgetown Data Science Cohort 6
 
-import psycopg2
+import psycopg2, statistics
+from itertools import chain
 
 # Connect to the Team Zero database, 'teamzeroDB', hosted locally.
 # In this case I'm using my local login role, 'Devin', with a
@@ -25,10 +26,45 @@ cur = conn.cursor()
 # Select and print the neighbourhood column from the neighborhoods table
 # Watch the spelling on neighborhood/neighbourhood
 
-cur.execute("SELECT neighbourhood FROM neighborhoods;")
+# cur.execute("SELECT listings FROM neighborhoods;")
+#
+# neighborRows = cur.fetchall()
+#
+# print "\nShow me the neighborhoods in the table:\n"
+# for row in neighborRows:
+#     print " ", row[0]
 
-neighborRows = cur.fetchall()
+# Select 'price' column from the 'listings' table and calculate
+# mean and median price
 
-print "\nShow me the neighborhoods in the table:\n"
-for row in neighborRows:
-    print " ", row[0]
+cur.execute("SELECT price FROM listings;")
+
+price = cur.fetchall()
+
+# Since the prior operation returns a list of tuples,
+# i.e., [(1,), (2,)], need to convert to a list of strings
+price = list(chain.from_iterable(price))
+
+# Convert the list of strings just created to a list of
+# integers, accounting for the leading $ symbol and also
+# removing commas, e.g., '$1,000.00' becomes 1000.00
+price = [i.lstrip('$') for i in price]
+price = [i.replace(',', '') for i in price]
+price = [float(i) for i in price]
+
+# Calculate and print the median using the statistics module
+print('The median listing price is ' + str(statistics.median(price)))
+
+# Double check the calculated median using a function
+def median(lst):
+    sortedLst = sorted(lst)
+    lstLen = len(lst)
+    index = (lstLen - 1) // 2
+
+    if (lstLen % 2):
+        return sortedLst[index]
+    else:
+        return (sortedLst[index] + sortedLst[index + 1])/2.0
+
+print('Calculated another way, the median listing price is ' + str(median(price)))
+print('The total number of listing records is ' + str(len(price)))
