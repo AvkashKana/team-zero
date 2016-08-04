@@ -7,13 +7,42 @@
 
 # 07/25/2016, Georgetown Data Science Cohort 6
 
-import psycopg2, statistics
+import psycopg2, statistics, os, csv
+import pandas as pd
 from itertools import chain
+from sys import exit
+
+# If you are running this code with the Team Zero CSV files
+# stored in the current working directory, uncomment and run the
+# code between lines 24 and 40 to load the CSV file 'listings.csv'
+# and then calculate the median listing price
+#
+# def read_lines():
+#     with open('listings.csv', 'rU') as data:
+#         reader = csv.reader(data)
+#         for row in reader:
+#             yield [ float(i) for i in row ]
+#
+# listings = open('listings.csv')
+# listingReader = csv.reader(listings)
+# listingData = list(listingReader)
+#
+# listingDataPrice = []
+#
+# for i in range (1,3724):
+#     listingDataPrice.append(listingData[i][57])
+#
+# listingDataPrice = [i.lstrip('$') for i in listingDataPrice]
+# listingDataPrice = [i.replace(',','') for i in listingDataPrice]
+# listingDataPrice = [float(i) for i in listingDataPrice]
+#
+# print('The median listing price is $' + str(statistics.median(listingDataPrice)))
+#
+# exit(0)
 
 # Connect to the Team Zero database, 'teamzeroDB', hosted locally.
 # In this case I'm using my local login role, 'Devin', with a
 # throwaway password, '123456'
-#
 
 try:
     conn = psycopg2.connect("dbname = teamzeroDB user = Devin host = localhost password = 123456")
@@ -38,7 +67,6 @@ cur = conn.cursor()
 # mean and median price
 
 cur.execute("SELECT price FROM listings;")
-
 price = cur.fetchall()
 
 # Since the prior operation returns a list of tuples,
@@ -53,7 +81,7 @@ price = [i.replace(',', '') for i in price]
 price = [float(i) for i in price]
 
 # Calculate and print the median using the statistics module
-print('The median listing price is ' + str(statistics.median(price)))
+print('The median listing price is $' + str(statistics.median(price)))
 
 # Double check the calculated median using a function
 def median(lst):
@@ -66,5 +94,5 @@ def median(lst):
     else:
         return (sortedLst[index] + sortedLst[index + 1])/2.0
 
-print('Calculated another way, the median listing price is ' + str(median(price)))
+print('Calculated another way, the median listing price is $' + str(median(price)))
 print('The total number of listing records is ' + str(len(price)))
