@@ -28,9 +28,13 @@ from sys import exit
 # listingData = list(listingReader)
 #
 # listingDataPrice = []
+# listingAccom = []
 #
 # for i in range (1,3724):
 #     listingDataPrice.append(listingData[i][57])
+#     listingAccom.append(listingData[i][50])
+#
+# print('The median accommodation number is ' + str(statistics.median(listingAccom)))
 #
 # listingDataPrice = [i.lstrip('$') for i in listingDataPrice]
 # listingDataPrice = [i.replace(',','') for i in listingDataPrice]
