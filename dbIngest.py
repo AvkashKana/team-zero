@@ -3,6 +3,7 @@
 # dbIngest.py -- This script will create several PostgreSQL
 # tables from the baseline Insideairbnb.com baseline CSV files
 
+# This file only needs to be run once.
 
 import pandas as pd
 from sqlalchemy import create_engine
