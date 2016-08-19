@@ -4,16 +4,21 @@
 # key columns from the listing.csv data file.
 # The really, really hard way. Pain train.
 
+# This script only needs to be run once. 
+
 # 08/06/2016, Georgetown Data Science Cohort 6
 
 import csv
 import re
 from itertools import izip
 
+# Open the listings file as downloaded from insideairbnb.com
+# File needs to be stored in the working directory
 listings = open('listings.csv')
 listingReader = csv.reader(listings)
 listingData = list(listingReader)
 
+# Create a list for each feature/column we want to cleanse
 l_ID = []
 host_ID = []
 host_name = []
@@ -58,6 +63,7 @@ review_score_loc = []
 review_score_value = []
 review_permonth = []
 
+# Populate each list from the appropriate column
 for i in range (1,3274):
     l_ID.append(listingData[i][0])
     host_ID.append(listingData[i][16])
@@ -244,10 +250,12 @@ review_score_value = [int(i) for i in review_score_value]
 review_permonth = [(float(i) if i else '0') for i in review_permonth]
 review_permonth = [float(i) for i in review_permonth]
 
-print review_permonth[1]
-print type(review_permonth[1])
+# Check you're getting the output you want
+# print review_permonth[1]
+# print type(review_permonth[1])
 
-# Write all these rows to a CSV
+# Write all these rows to a CSV name 'listings_clean.csv' stored in the
+# working directory
 with open('listings_clean.csv', 'wb') as f:
     writer = csv.writer(f)
     writer.writerows(izip(l_ID,
