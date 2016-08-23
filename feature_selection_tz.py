@@ -171,10 +171,10 @@ labels = listings_data['price']
 # print(list(features[sfm.get_support(indices=True)]))
 
 # For ElasticNet
-# model = ElasticNet()
-# sfm = SelectFromModel(model)
-# sfm.fit(features, labels)
-# print(list(features[sfm.get_support(indices=True)]))
+model = ElasticNet()
+sfm = SelectFromModel(model)
+sfm.fit(features, labels)
+print(list(features[sfm.get_support(indices=True)]))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DIMENSIONALITY REDUCTION
