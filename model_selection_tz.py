@@ -30,3 +30,66 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.svm import LinearSVC, NuSVC, SVC
+
+# Create a list of names, drawn from the header for each feature. In this case
+# we're going to use a mix of features identified by the Ridge and ElasticNet
+# transformer code in feature_selection_tz.py
+names = [
+    'host_response_rate',
+    'host_acceptance_rate',
+    'latitude',
+    'longitude',
+    'property_type',
+    'room_type',
+    'accommodates',
+    'bathrooms',
+    'bedrooms',
+    'beds',
+    'price',
+    'review_scores_communication',
+    'review_scores_location',
+    'reviews_per_month'
+]
+
+# Create the data frame using the relevant columns from the listings_clean.csv
+# file. In this case be sure to confirm you are pulling all the relevant rows by
+# explicitly indicating there are no column headers
+data = pd.read_csv('listings_clean.csv',
+            header = None,
+            usecols = [
+            4, 5, 10, 11,
+            12, 13, 14, 15,
+            16, 17, 19, 39, 40, 42
+            ])
+
+# Add the column headers using the names list
+data.columns = names
+
+# print (data.head())
+
+# Creat the meta.json file, similar to the census and model_selection notebooks.
+# Here we'll use price as the target - we shouldn't need to limit ourselves to
+# unique values of price (?).
+
+# We'll also convert the categorial columns to values
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIXED 8/26/16 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# Listing ID 3771 has a property type that is empty, which will cause the
+# corresponding meta.json list to include a NaN value
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIXED 8/26/16 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# Replaced the empty property type list element with 'Apartment'
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIXED 8/26/16 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+meta = {
+    'target_names' : list(data.price),
+    'feature_names' : list(data.columns),
+    'categorical_features' : {
+        column : list(data[column].unique())
+        for column in data.columns
+        if data[column].dtype == 'object'
+    },
+}
+
+#Write the meta.json file
+with open('meta.json', 'w') as f:
+    json.dump(meta, f, indent = 2)

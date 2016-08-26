@@ -4,7 +4,7 @@
 # key columns from the listing.csv data file.
 # The really, really hard way. Pain train.
 
-# This script only needs to be run once. 
+# This script only needs to be run once.
 
 # 08/06/2016, Georgetown Data Science Cohort 6
 
@@ -148,7 +148,11 @@ lat = [float(i) for i in lat]
 # Longitude gets converted to a float
 longitude = [float(i) for i in longitude]
 # Property type can remain as a string
-prop_type = prop_type
+# ID 3771 has no property type. Because the overall listing population is
+# 61% apartments, and it's not clearly some other property type,
+# we'll simply guess that it's an apartment by replacing empty values with
+# 'Apartment'
+prop_type = [(i if i else 'Apartment') for i in prop_type]
 # Room type can remain as a string
 room_type = room_type
 # Accommodates gets converted to an int

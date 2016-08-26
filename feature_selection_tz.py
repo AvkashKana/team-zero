@@ -159,21 +159,24 @@ labels = listings_data['price']
 # Now we'll grab the transformer code and wave our magic wand to select
 # features based on the wisdom of Python
 # For LASSO
-# model = Lasso()
-# sfm = SelectFromModel(model)
-# sfm.fit(features, labels)
-# print(list(features[sfm.get_support(indices=True)]))
+model = Lasso()
+sfm = SelectFromModel(model)
+sfm.fit(features, labels)
+print ("LASSO Results")
+print(list(features[sfm.get_support(indices=True)]))
 
 # For Ridge
-# model = Ridge()
-# sfm = SelectFromModel(model)
-# sfm.fit(features, labels)
-# print(list(features[sfm.get_support(indices=True)]))
+model = Ridge()
+sfm = SelectFromModel(model)
+sfm.fit(features, labels)
+print ("Ridge Results")
+print(list(features[sfm.get_support(indices=True)]))
 
 # For ElasticNet
 model = ElasticNet()
 sfm = SelectFromModel(model)
 sfm.fit(features, labels)
+print ("ElasticNet Results")
 print(list(features[sfm.get_support(indices=True)]))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
