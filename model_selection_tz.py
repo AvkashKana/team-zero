@@ -93,3 +93,34 @@ meta = {
 #Write the meta.json file
 with open('meta.json', 'w') as f:
     json.dump(meta, f, indent = 2)
+
+# Per the model_selection.ipynb file, load the data and create the bunch
+def load_data():
+    # Load meta data from the json created just above
+    with open('meta.json', 'r') as f:
+        meta = json.load(f)
+
+    names = meta['feature_names']
+
+    # Load the readme.md info
+    with open('README.md', 'r') as f:
+        readme = f.read()
+
+    # Load the data. This is duplicative, but just to be explicit
+    # listings = pd.read_csv('listings_clean_headers.csv', names = names)
+    # print (data[names[0:]])
+
+    # Remove target from feature_names
+    meta['feature_names'].pop(10)
+
+    # Return the bunch
+    return Bunch(
+        data = data[names[0:]],
+        target = data.price,
+        target_names = meta['target_names'],
+        feature_names = meta['feature_names'],
+        categorical_features = meta['categorical_features'],
+        DESCR = readme
+    )
+
+dataset = load_data()
