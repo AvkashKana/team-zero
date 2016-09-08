@@ -4,7 +4,7 @@
 # model_selection.ipynb notebook and converted for use with the
 # Team Zero insideairbnb data.
 
-# This file is designed to explore machine learning models.
+# This file is designed to explore machine learning classification models.
 
 # 08/22/2016, Georgetown Data Science Cohort 6
 
@@ -57,7 +57,8 @@ names = [
 data = pd.read_csv('listings_clean.csv',
             header = None,
             usecols = [
-            4, 5, 10, 11,
+            4, 5,
+            10, 11,
             12, 13, 14, 15,
             16, 17, 19, 39, 40, 42
             ])
@@ -208,7 +209,7 @@ def model_selection(dataset, feature_model, model_estimator, fse_label, model_la
     scores = {'accuracy':[], 'auc':[], 'f1':[], 'precision':[], 'recall':[]}
 
     # Kick it up a notch! 12 folds
-    for train, test in StratifiedKFold(y, n_folds=12, shuffle=True):  # Ben says always use 12 folds! We cheat a bit here...
+    for train, test in StratifiedKFold(y, n_folds=4, shuffle=True):  # Ben says always use 12 folds! We cheat a bit here...
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
         model.fit(X_train, y_train)
@@ -276,12 +277,12 @@ def model_selection(dataset, feature_model, model_estimator, fse_label, model_la
 # Evaluate the models
 evaluation = pd.DataFrame()
 
-evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", LogisticRegression(), "none", "LogisticRegression")).T)
+# evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", LogisticRegression(), "none", "LogisticRegression")).T)
 # evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", KNeighborsClassifier(), "none", "KNeighborsClassifier")).T)
 # evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", BaggingClassifier(KNeighborsClassifier()), "none", "BaggedKNeighborsClassifier")).T)
 # evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", RandomForestClassifier(), "none", "RandomForestClassifier")).T)
 # evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", ExtraTreesClassifier(), "none", "ExtraTreesClassifier")).T)
 # evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", SGDClassifier(), "none", "SGDClassifier")).T)
-# evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", LinearSVC(), "none", "LinearSVC")).T)
+evaluation = evaluation.append(pd.DataFrame(model_selection(dataset, "none", LinearSVC(), "none", "LinearSVC")).T)
 #
 # evaluation.to_csv(os.path.join('data', 'listings', 'model_comparison.csv'), index=False)
